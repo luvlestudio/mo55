@@ -7,10 +7,10 @@ const kakaoPayGroomLink = [
 const kakaoPayBrideLink = [
   '', // 1번째 계좌
   '', // 2번째 계좌
-]
+];
 
 // 페이지 로드 시에 애니메이션 적용
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   const UlElements = document.querySelectorAll('.account-panel ul');
   const KakaoButtonList = [];
   UlElements.forEach((UlElement, ulIndex) => {
@@ -18,14 +18,15 @@ document.addEventListener("DOMContentLoaded", function () {
     LiElements.forEach((element, liIndex) => {
       const copyTxt = element.querySelector('p').innerText;
       console.log(copyTxt, 'copyTxt');
-      
+
       const copyButton = element.querySelectorAll('button')[0];
       copyButton.addEventListener('click', function () {
         copy(copyTxt);
       });
 
       const kakaoButton = element.querySelectorAll('button')[1];
-      const kakaoPayLinkList = ulIndex === 0 ? kakaoPayGroomLink : kakaoPayBrideLink;
+      const kakaoPayLinkList =
+        ulIndex === 0 ? kakaoPayGroomLink : kakaoPayBrideLink;
       if (kakaoPayLinkList[liIndex]) {
         kakaoButton.addEventListener('click', function () {
           window.location.href = kakaoPayLinkList[liIndex];
@@ -38,9 +39,32 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function copy(text) {
-  // 복사
-  navigator.clipboard.writeText(text);
+  // iOS와 안드로이드 모두 지원하는 복사 기능
+  if (navigator.clipboard && window.isSecureContext) {
+    // 기본 Clipboard API 사용 (안드로이드)
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert('클립보드에 복사되었습니다.');
+      })
+      .catch(() => {
+        // Clipboard API 실패시 fallback
+        fallbackCopyTextToClipboard(text);
+      });
+  } else {
+    // iOS나 보안 컨텍스트가 아닌 경우 fallback 사용
+    fallbackCopyTextToClipboard(text);
+  }
+}
 
-  // 복사완료에 대해 Alert으로 띄우기
-  alert("클립보드에 복사되었습니다.");
+function fallbackCopyTextToClipboard(copyText) {
+  var tmpTextarea = document.createElement('textarea');
+  tmpTextarea.value = copyText;
+
+  document.body.appendChild(tmpTextarea);
+  tmpTextarea.select();
+  tmpTextarea.setSelectionRange(0, 9999); // 셀렉트 범위 설정
+
+  document.execCommand('copy');
+  document.body.removeChild(tmpTextarea);
 }
