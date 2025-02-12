@@ -47,7 +47,7 @@ window.onload = () => {
       objectType: "feed",
       content: {
         title: "이동주 ♥ 김다솜 저희 결혼합니다.",
-        description: "2025년 5월 17일 토요일♡",
+        description: "2025년 5월 17일 (토)\n 오후 12시 40분 MJ컨벤션 파티오볼륨",
         imageUrl: "https://i.imgur.com/srfGsaf.png",
         imageWidth: 1200,
         imageHeight: 630,
